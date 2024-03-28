@@ -5,11 +5,22 @@
 <div class="d-flex justify-content-around m-a w-40">
   <div class="subtitle">
     <h2>Nomber of JOs</h2>
-    <p>{{ (InputOlympics$ | async)?.length }}</p>
+    <p>{{ (olympics$ | async)?.length }}</p>
   </div>
   <div class="subtitle">
     <h2>Nomber of countries</h2>
-    <p>{{ (InputOlympics$ | async)?.length }}</p>
+    <p>{{ (olympics$ | async)?.length }}</p>
   </div>
 </div>
 
+<ngx-charts-pie-chart
+  [results]="single"
+  [gradient]="gradient"
+  [legend]="showLegend"
+  [labels]="showLabels"
+  [doughnut]="isDoughnut"
+  (select)="onSelect($event)"
+  (activate)="onActivate($event)"
+  (deactivate)="onDeactivate($event)"
+>
+</ngx-charts-pie-chart>

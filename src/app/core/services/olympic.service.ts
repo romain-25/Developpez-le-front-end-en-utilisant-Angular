@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import {BehaviorSubject, Observable} from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import {iParticipation} from "../models/Participation";
+import {iCountry} from "../models/Olympic";
 
 @Injectable({
   providedIn: 'root',
@@ -13,10 +14,10 @@ export class OlympicService {
 
   constructor(private http: HttpClient) {}
 
-  loadInitialData():Observable<iParticipation[]> {
-    return this.http.get<iParticipation[]>(this.olympicUrl).pipe(
-      tap((value:iParticipation[]) => this.olympics$.next(value)),
-      catchError((error, caught:Observable<iParticipation[]>) => {
+  loadInitialData():Observable<iCountry[]> {
+    return this.http.get<iCountry[]>(this.olympicUrl).pipe(
+      tap((value:iCountry[]) => this.olympics$.next(value)),
+      catchError((error, caught:Observable<iCountry[]>) => {
         // TODO: improve error handling
         console.error(error);
         // can be useful to end loading state and let the user know something went wrong
@@ -25,8 +26,7 @@ export class OlympicService {
       })
     );
   }
-
-  getOlympics():Observable<iParticipation[]> {
+  getOlympics():Observable<iCountry[]> {
     return this.olympics$.asObservable();
   }
 }
