@@ -1,9 +1,7 @@
-// TODO: create here a typescript interface for an olympic country
-/*
-example of an olympic country:
+export interface iCountry
 {
-    id: 1,
-    country: "Italy",
+    id: number,
+    country: string,
     participations: []
 }
-*/
+

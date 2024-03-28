@@ -1,0 +1,15 @@
+<div class="d-flex justify-content-center">
+  <h1 class="title">Medals per country</h1>
+</div>
+
+<div class="d-flex justify-content-around m-a w-40">
+  <div class="subtitle">
+    <h2>Nomber of JOs</h2>
+    <p>{{ (InputOlympics$ | async)?.length }}</p>
+  </div>
+  <div class="subtitle">
+    <h2>Nomber of countries</h2>
+    <p>{{ (InputOlympics$ | async)?.length }}</p>
+  </div>
+</div>
+
