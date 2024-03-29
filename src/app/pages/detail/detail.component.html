@@ -1,18 +1,36 @@
+<div class="m-a w-80">
+  <p (click)="buttonBack()" class="title returnButton">
+    Retour
+  </p>
+</div>
+
 <div class="d-flex justify-content-center">
-  <h1 class="title">Name of the country</h1>
+  <h1 class="title">{{stringCountry}}</h1>
 </div>
 
 <div class="d-flex justify-content-around m-a w-70">
   <div class="subtitle">
     <h2>Nomber of entries</h2>
-    <p></p>
+    <p>{{countEntites}}</p>
   </div>
   <div class="subtitle">
     <h2>Total number medals</h2>
-    <p></p>
+    <p>{{nbrMedals}}</p>
   </div>
   <div class="subtitle">
     <h2>Total number of athletes</h2>
-    <p></p>
+    <p>{{nbrAthletes}}</p>
   </div>
 </div>
+<div class="w-80 m-a mt-2">
+  <ngx-charts-line-chart
+    [showXAxisLabel]="true"
+    [showYAxisLabel]="true"
+    [xAxis]="true"
+    [yAxis]="true"
+    [xAxisLabel]="xAxisLabel"
+    [results]="multi"
+  >
+  </ngx-charts-line-chart>
+</div>
+

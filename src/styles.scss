@@ -25,6 +25,9 @@
     font-weight: lighter;
   }
 }
+.mt-2{
+  margin-top: 2rem;
+}
 .subtitle{
   padding: 5px 10px;
   border-radius: 15px;
@@ -46,10 +49,18 @@
 @mixin width($value) {
   width: percentage($value / 100);
 }
+@mixin mt($value) {
+  margin-top: $value + rem;
+}
 
 @for $i from 1 through 100 {
   .w-#{$i} {
     @include width($i);
+  }
+}
+@for $i from 1 through 10 {
+  .mt-#{$i} {
+    @include mt($i);
   }
 }
 
