@@ -15,6 +15,33 @@
 .m-a{
   margin: auto;
 }
+.title{
+  font-weight: 200;
+  padding: 5px 10px;
+  border-radius: 6px;
+  background-color: #04838F;
+  color: white;
+  h1{
+    font-weight: lighter;
+  }
+}
+.subtitle{
+  padding: 5px 10px;
+  border-radius: 15px;
+  border: 2px solid #04838F;
+  h2{
+    margin: 10px;
+    font-weight: lighter;
+    font-size: 20px;
+    color: gray;
+  }
+  p{
+    margin: 5px;
+    font-size: 25px;
+    font-weight: bold;
+    text-align: center;
+  }
+}
 // mixin
 @mixin width($value) {
   width: percentage($value / 100);
