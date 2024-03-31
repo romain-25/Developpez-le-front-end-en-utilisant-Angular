@@ -45,6 +45,15 @@
     text-align: center;
   }
 }
+@media screen and (max-width: 768px) {
+  .subtitle{
+    margin: 2px;
+    h2{
+      font-size: 16px;
+      margin: 0;
+    }
+  }
+}
 // mixin
 @mixin width($value) {
   width: percentage($value / 100);
@@ -56,6 +65,9 @@
 @for $i from 1 through 100 {
   .w-#{$i} {
     @include width($i);
+    @media screen and (max-width: 768px) {
+      width: 100%;
+    }
   }
 }
 @for $i from 1 through 10 {
