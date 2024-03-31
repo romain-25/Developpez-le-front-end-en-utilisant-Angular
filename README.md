@@ -1,6 +1,10 @@
 # OlympicGamesStarter
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.1.3.
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.2.
+
+Install Node.js `https://nodejs.org/en/download`
+
+Install in local Angular CLI `npm install -g @angular/cli`
 
 Don't forget to install your node_modules before starting (`npm install`).
 

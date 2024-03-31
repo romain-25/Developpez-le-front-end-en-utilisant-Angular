@@ -1,5 +1,5 @@
-import {Component} from '@angular/core';
-import {Observable} from "rxjs";
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {map, Observable, Subscription, take} from "rxjs";
 import {iParticipation} from "../../../../core/models/Participation";
 import {AsyncPipe} from "@angular/common";
 import {NgxChartsModule} from "@swimlane/ngx-charts";
@@ -18,37 +18,47 @@ import {iPieDate} from "../../../../core/models/PieData";
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit, OnDestroy{
   olympics$!: Observable<iOlympic[]>;
   single!: iPieDate[];
-  country: iOlympic[] = [];
+  subscription!: Subscription;
+  constructor(private olympicService: OlympicService, private router: Router) {}
+  ngOnInit(): void{
+    this.olympics$ = this.olympicService.getOlympics();
+    setTimeout((): void=>{
+      this.subscription = this.getCountry().pipe(
+        take(1)
+      ).subscribe((data: iPieDate[]): void => {
+        this.single = data;
+      });
+    }, 100)
 
-  constructor(private olympicService: OlympicService, private router: Router) {
-    this.olympics$ = this.olympicService.getOlympics()
-    setTimeout((): void => {
-      this.olympicService.getOlympics().subscribe((result: iOlympic[]): void => {
-        this.country = result
+  }
+  // Generate data for pie chart
+  getCountry(): Observable<iPieDate[]> {
+    return this.olympics$.pipe(
+      map((arrOlympics: iOlympic[]) => {
+        if (!arrOlympics) {
+          return [];
+        }
+        return arrOlympics.map((olympic: iOlympic): iPieDate => {
+          const medalsCount: number = olympic.participations.reduce((total: number, participation: iParticipation): number => {
+            return total + participation.medalsCount;
+          }, 0);
+          return {
+            name: olympic.country,
+            value: medalsCount
+          };
+        });
       })
-      this.single = this.generateDataPie()
-    }, 1)
+    );
   }
-
-  generateDataPie(): iPieDate[] {
-    let pieChartData: iPieDate[] = [];
-    this.country.forEach((country: iOlympic): void => {
-      let medalsCount: number = 0;
-      country.participations.forEach((participation: iParticipation): void => {
-        medalsCount += participation.medalsCount
-      });
-      pieChartData.push({
-        name: country.country,
-        value: medalsCount
-      });
-    });
-    return pieChartData;
-  }
-
   onSelect(data: iPieDate): void {
     this.router.navigateByUrl(`detail/${data.name}`)
+  }
+  ngOnDestroy(): void {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 }

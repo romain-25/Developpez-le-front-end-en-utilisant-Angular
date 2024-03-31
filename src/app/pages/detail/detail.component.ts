@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {AsyncPipe} from "@angular/common";
 import {NgxChartsModule} from "@swimlane/ngx-charts";
 import {OlympicService} from "../../core/services/olympic.service";
@@ -7,7 +7,7 @@ import {iOlympic} from "../../core/models/Olympic";
 import {iParticipation} from "../../core/models/Participation";
 import {LineData, LineDataSerie} from "../../core/models/LineData";
 import {Location} from '@angular/common';
-import {map, Observable, take} from "rxjs";
+import {map, Observable, Subscription, take} from "rxjs";
 
 @Component({
   selector: 'app-detail',
@@ -19,7 +19,7 @@ import {map, Observable, take} from "rxjs";
   templateUrl: './detail.component.html',
   styleUrl: './detail.component.scss'
 })
-export class DetailComponent implements OnInit{
+export class DetailComponent implements OnInit, OnDestroy{
   multi: any[] = [];
   olympic!: iOlympic;
   xAxisLabel: string = 'Date';
@@ -27,18 +27,19 @@ export class DetailComponent implements OnInit{
   nbrMedals: number = 0;
   nbrAthletes: number = 0;
   countEntites: number = 0;
-
+  subscription!: Subscription;
 
   constructor(private olympicService: OlympicService, private route: ActivatedRoute, private location: Location) {};
 
   ngOnInit(): void{
     this.stringCountry = this.route.snapshot.params['name'];
-    this.getCountryAndCount(this.stringCountry).pipe(
+    this.subscription =  this.getCountryAndCount(this.stringCountry).pipe(
       take(1)
     ).subscribe((data: LineData[]): void => {
       this.multi = data;
     });
   }
+  // Generate data for line chart and calculate entities, athletes and medals
   getCountryAndCount(country: string): Observable<LineData[]> {
     return this.olympicService.getOlympics().pipe(
       map((arrOlympics: iOlympic[]) =>
@@ -64,6 +65,11 @@ export class DetailComponent implements OnInit{
   }
   buttonBack(): void {
     this.location.back();
+  }
+  ngOnDestroy(): void {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 }
 
