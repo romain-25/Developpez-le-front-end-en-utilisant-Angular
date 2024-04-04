@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {map, Observable, Subscription, take} from "rxjs";
+import {filter, map, Observable, Subscription, switchMap, take} from "rxjs";
 import {iParticipation} from "../../../../core/models/Participation";
 import {AsyncPipe} from "@angular/common";
 import {NgxChartsModule} from "@swimlane/ngx-charts";
@@ -23,24 +23,14 @@ export class DashboardComponent implements OnInit, OnDestroy{
   single!: iPieDate[];
   subscription!: Subscription;
   constructor(private olympicService: OlympicService, private router: Router) {}
-  ngOnInit(): void{
-    this.olympics$ = this.olympicService.getOlympics();
-    setTimeout((): void=>{
-      this.subscription = this.getCountry().pipe(
-        take(1)
-      ).subscribe((data: iPieDate[]): void => {
-        this.single = data;
-      });
-    }, 100)
-
+  ngOnInit(): void { this.subscription = this.olympicService.loadInitialData().pipe(
+    filter((olympics:iOlympic[]) => !!olympics),
+    switchMap(() => this.getCountry())).subscribe((data: iPieDate[]): void => { this.single = data; });
   }
   // Generate data for pie chart
   getCountry(): Observable<iPieDate[]> {
-    return this.olympics$.pipe(
+    return this.olympicService.loadInitialData().pipe(
       map((arrOlympics: iOlympic[]) => {
-        if (!arrOlympics) {
-          return [];
-        }
         return arrOlympics.map((olympic: iOlympic): iPieDate => {
           const medalsCount: number = olympic.participations.reduce((total: number, participation: iParticipation): number => {
             return total + participation.medalsCount;
