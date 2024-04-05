@@ -23,7 +23,9 @@ export class DashboardComponent implements OnInit, OnDestroy{
   single!: iPieDate[];
   subscription!: Subscription;
   constructor(private olympicService: OlympicService, private router: Router) {}
-  ngOnInit(): void { this.subscription = this.olympicService.loadInitialData().pipe(
+  ngOnInit(): void {
+    this.olympics$ = this.olympicService.getOlympics();
+    this.subscription = this.olympicService.loadInitialData().pipe(
     filter((olympics:iOlympic[]) => !!olympics),
     switchMap(() => this.getCountry())).subscribe((data: iPieDate[]): void => { this.single = data; });
   }
