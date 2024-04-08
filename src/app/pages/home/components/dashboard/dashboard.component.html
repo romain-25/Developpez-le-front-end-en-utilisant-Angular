@@ -12,13 +12,14 @@
     <p>{{ (olympics$ | async)?.length }}</p>
   </div>
 </div>
-
-<ngx-charts-pie-chart
-  [results]="single"
-  [gradient]="true"
-  [legend]="false"
-  [labels]="true"
-  [doughnut]="false"
-  (select)="onSelect($event)"
->
-</ngx-charts-pie-chart>
+@if(single){
+  <ngx-charts-pie-chart
+    [results]="single"
+    [gradient]="true"
+    [legend]="false"
+    [labels]="true"
+    [doughnut]="false"
+    (select)="onSelect($event)"
+  >
+  </ngx-charts-pie-chart>
+}

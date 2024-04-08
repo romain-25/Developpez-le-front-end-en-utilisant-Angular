@@ -1,13 +1,14 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {AsyncPipe} from "@angular/common";
 import {NgxChartsModule} from "@swimlane/ngx-charts";
 import {OlympicService} from "../../core/services/olympic.service";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {iOlympic} from "../../core/models/Olympic";
 import {iParticipation} from "../../core/models/Participation";
 import {LineData, LineDataSerie} from "../../core/models/LineData";
 import {Location} from '@angular/common';
-import {map, Observable, Subscription, take} from "rxjs";
+import {map, Observable, of, Subscription, switchMap, take} from "rxjs";
+import {catchError, tap} from "rxjs/operators";
 
 @Component({
   selector: 'app-detail',
@@ -28,8 +29,10 @@ export class DetailComponent implements OnInit, OnDestroy{
   nbrAthletes: number = 0;
   countEntites: number = 0;
   subscription!: Subscription;
-
-  constructor(private olympicService: OlympicService, private route: ActivatedRoute, private location: Location) {};
+  olympicService: OlympicService = inject(OlympicService);
+  route: ActivatedRoute = inject(ActivatedRoute);
+  router: Router = inject(Router);
+  location: Location = inject(Location);
 
   ngOnInit(): void{
     this.stringCountry = this.route.snapshot.params['name'];
@@ -39,33 +42,62 @@ export class DetailComponent implements OnInit, OnDestroy{
       this.multi = data;
     });
   }
-  // Generate data for line chart and calculate entities, athletes and medals
+  /**
+   * Generates data for a line chart and calculates total entities, athletes, and medals for the selected country.
+   * Redirects to the home page if the selected country is not found in the Olympics data.
+   * @param country - The name of the selected country.
+   * @returns An Observable of line chart data.
+   */
   getCountryAndCount(country: string): Observable<LineData[]> {
     return this.olympicService.getOlympics().pipe(
-      map((arrOlympics: iOlympic[]) =>
-        arrOlympics
-          .filter((olympic: iOlympic): boolean => olympic.country === country)
-          .map((olympic: iOlympic): LineData => {
-            this.countEntites = olympic.participations.length;
-            const series: LineDataSerie[] = olympic.participations.map((participation: iParticipation): LineDataSerie => {
-              this.nbrAthletes += participation.athleteCount;
-              this.nbrMedals += participation.medalsCount;
-              return {
-                name: String(participation.year),
-                value: participation.medalsCount
-              };
-            });
+      switchMap((arrOlympics: iOlympic[] | undefined) => {
+        if (arrOlympics) {
+          // Filter Olympics based on the selected country
+          return of(arrOlympics.filter((olympic: iOlympic): boolean => olympic.country === country));
+        } else {
+          return of([]);
+        }
+      }),
+      tap((filteredOlympics: iOlympic[]): void => {
+        // If filtered Olympics array is empty, redirect to home
+        if (filteredOlympics.length === 0) {
+          this.router.navigate(['']);
+        }
+      }),
+      map((filteredOlympics: iOlympic[]) =>
+        filteredOlympics.map((olympic: iOlympic): LineData => {
+          // Calculate total entities, athletes, and medals for the selected country
+          this.countEntites = olympic.participations.length;
+          const series: LineDataSerie[] = olympic.participations.map((participation: iParticipation): LineDataSerie => {
+            this.nbrAthletes += participation.athleteCount;
+            this.nbrMedals += participation.medalsCount;
             return {
-              name: olympic.country,
-              series,
+              name: String(participation.year),
+              value: participation.medalsCount
             };
-          })
-      )
+          });
+          return {
+            name: olympic.country,
+            series,
+          };
+        })
+      ),
+      catchError((error: any, caught: Observable<LineData[]>) => {
+        // TODO: Handle error appropriately
+        console.error(error);
+        return caught;
+      })
     );
   }
+  /**
+   * Navigates back to the previous page.
+   */
   buttonBack(): void {
     this.location.back();
   }
+  /**
+   * Cleans up subscriptions when the component is destroyed.
+   */
   ngOnDestroy(): void {
     if (this.subscription) {
       this.subscription.unsubscribe();

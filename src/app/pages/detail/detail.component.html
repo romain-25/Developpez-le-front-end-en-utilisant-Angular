@@ -23,14 +23,17 @@
   </div>
 </div>
 <div class="w-80 m-a mt-2">
-  <ngx-charts-line-chart
-    [showXAxisLabel]="true"
-    [showYAxisLabel]="true"
-    [xAxis]="true"
-    [yAxis]="true"
-    [xAxisLabel]="xAxisLabel"
-    [results]="multi"
-  >
-  </ngx-charts-line-chart>
+  @if(multi){
+    <ngx-charts-line-chart
+      [showXAxisLabel]="true"
+      [showYAxisLabel]="true"
+      [xAxis]="true"
+      [yAxis]="true"
+      [xAxisLabel]="xAxisLabel"
+      [results]="multi"
+    >
+    </ngx-charts-line-chart>
+  }
+
 </div>
 
