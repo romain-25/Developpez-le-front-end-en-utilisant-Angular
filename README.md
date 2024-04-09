@@ -1,33 +1,39 @@
-# OlympicGamesStarter
+# Angular Olympics Dashboard Project
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.2.
+This Angular project is a dashboard displaying data about the Olympic Games. It uses Angular version 17.3.1 and the ngx-charts library version 20.5.0 for data visualization.
 
-Install Node.js `https://nodejs.org/en/download`
+## Features
 
-Install in local Angular CLI `npm install -g @angular/cli`
+1. Display of a pie chart on the home page:
+  - Shows the countries participating in the Olympic Games.
+  - On hover, displays the number of medals won by each country.
+  - Clicking on a country redirects to a detailed page.
 
-Don't forget to install your node_modules before starting (`npm install`).
+2. Detailed page:
+  - Displays a line chart for the selected country.
+  - Shows the following data:
+    - Total number of medals obtained by the country.
+    - Total number of athletes representing the country at the Olympic Games.
 
-## Development server
+## Installation
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+1. Clone the repository:
 
-## Build
+   ```bash
+   git clone https://github.com/your-user/angular-olympics-dashboard.git
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+2. Move to directory projet:
 
-## Where to start
+   ```bash
+     cd angular-olympics-dashboard
 
-As you can see, an architecture has already been defined for the project. It is just a suggestion, you can choose to use your own. The predefined architecture includes (in addition to the default angular architecture) the following:
+3. Install dependencies:
 
-- `components` folder: contains every reusable components
-- `pages` folder: contains components used for routing
-- `core` folder: contains the business logic (`services` and `models` folders)
+   ```bash
+     npm install
 
-I suggest you to start by understanding this starter code. Pay an extra attention to the `app-routing.module.ts` and the `olympic.service.ts`.
+4. Start the development server:
 
-Once mastered, you should continue by creating the typescript interfaces inside the `models` folder. As you can see I already created two files corresponding to the data included inside the `olympic.json`. With your interfaces, improve the code by replacing every `any` by the corresponding interface.
-
-You're now ready to implement the requested features.
-
-Good luck!
+    ```bash
+    ng serve
+5. Open your browser and go to http://localhost:4200/ to view the application.
