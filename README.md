@@ -1,6 +1,6 @@
 # Angular Olympics Dashboard Project
 
-This Angular project is a dashboard displaying data about the Olympic Games. It uses Angular version 17.3.1 and the ngx-charts library version 20.5.0 for data visualization.
+This Angular project is a dashboard displaying data about the Olympic Games. It uses **Angular 17.3.1** and the **ngx-charts 20.5.0** for data visualization.
 
 ## Features
 
@@ -17,23 +17,29 @@ This Angular project is a dashboard displaying data about the Olympic Games. It 
 
 ## Installation
 
-1. Clone the repository:
+1. Install Node.js https://nodejs.org/en/download
+
+2. Install in local Angular CLI
+   ```bash
+   npm install -g @angular/cli
+
+3. Clone the repository:
 
    ```bash
-   git clone https://github.com/your-user/angular-olympics-dashboard.git
+   git clone https://github.com/romain-25/Developpez-le-front-end-en-utilisant-Angular.git
 
-2. Move to directory projet:
-
-   ```bash
-     cd angular-olympics-dashboard
-
-3. Install dependencies:
+4. Move to directory projet:
 
    ```bash
-     npm install
+   cd angular-olympics-dashboard
 
-4. Start the development server:
+5. Install dependencies:
+
+   ```bash
+   npm install
+
+6. Start the development server:
 
     ```bash
     ng serve
-5. Open your browser and go to http://localhost:4200/ to view the application.
+7. Open your browser and go to http://localhost:4200/ to view the application.
