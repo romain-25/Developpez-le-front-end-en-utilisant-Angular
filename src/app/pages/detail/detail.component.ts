@@ -20,8 +20,8 @@ import {catchError, tap} from "rxjs/operators";
   templateUrl: './detail.component.html',
   styleUrl: './detail.component.scss'
 })
-export class DetailComponent implements OnInit, OnDestroy{
-  multi: any[] = [];
+export class DetailComponent implements OnInit{
+  multi: LineData[] = [];
   olympic!: iOlympic;
   xAxisLabel: string = 'Date';
   stringCountry: string = '';
@@ -61,7 +61,7 @@ export class DetailComponent implements OnInit, OnDestroy{
       tap((filteredOlympics: iOlympic[]): void => {
         // If filtered Olympics array is empty, redirect to home
         if (filteredOlympics.length === 0) {
-          this.router.navigate(['']);
+          this.router.navigate(['not-found']);
         }
       }),
       map((filteredOlympics: iOlympic[]) =>
@@ -83,7 +83,6 @@ export class DetailComponent implements OnInit, OnDestroy{
         })
       ),
       catchError((error: any, caught: Observable<LineData[]>) => {
-        // TODO: Handle error appropriately
         console.error(error);
         return caught;
       })
@@ -94,14 +93,6 @@ export class DetailComponent implements OnInit, OnDestroy{
    */
   buttonBack(): void {
     this.location.back();
-  }
-  /**
-   * Cleans up subscriptions when the component is destroyed.
-   */
-  ngOnDestroy(): void {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
   }
 }
 
