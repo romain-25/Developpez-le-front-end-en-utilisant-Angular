@@ -8,11 +8,6 @@ import {iOlympic} from "../../core/models/Olympic";
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
-export class HomeComponent implements OnInit {
-  public olympics$: Observable<iOlympic[] | null> = of(null);
-  olympicService:OlympicService = inject(OlympicService)
+export class HomeComponent {
 
-  ngOnInit(): void {
-    this.olympics$ = this.olympicService.getOlympics();
-  }
 }
